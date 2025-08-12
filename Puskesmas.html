@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Puskesmas Berkah</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f8f7;
+      color: #333;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00796B;
+      margin-bottom: 10px;
+    }
+
+    hr {
+      margin: 20px 0;
+      border: 0;
+      height: 2px;
+      background-color: #00796B;
+      width: 60%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    button {
+      background-color: #009688;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      margin: 10px 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background-color: #00796B;
+    }
+
+    label {
+      display: block;
+      margin: 10px 0;
+      font-weight: 500;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      width: 200px;
+      margin-left: 10px;
+      margin-top: 5px;
+    }
+
+    h3 {
+      color: #004D40;
+      margin-top: 30px;
+    }
+
+    a button {
+      background-color: #607d8b;
+    }
+
+    a button:hover {
+      background-color: #455a64;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 30px;
+    }
+
+    .status-box {
+      min-width: 320px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      text-align: center;
+    }
+
+    td {
+      border: 1px solid #333;
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Selamat Datang di PUSKESMAS Berkah Malang</h1>
+  <hr>
+  <a href="Halaman Utama.html"><button>Kembali Ke Halaman Utama</button></a>
+  <br><button onclick="cek()">Cek Kursi Kosong</button>
+  <br><br>
+
+  <div class="container">
+    <!-- Form -->
+    <div>
+      <h3>Daftar Kursi</h3>
+      <label>Nama Pasien: <input type="text" id="namaPasien"></label>
+      <label>Nomor Kursi (1-5): <input type="number" id="noKursi" min="1" max="5"></label>
+      <button onclick="daftar()">Pilih Kursi</button>
+      <br><br>
+
+      <h3>Panggil Pasien</h3>
+      <label>Nama Pasien untuk Dipanggil: <input type="text" id="namaPanggilan"></label>
+      <button onclick="panggil()">Panggil Pasien</button>
+    </div>
+
+    <!-- Status Kursi -->
+    <div class="status-box">
+      <h3>Status Kursi:</h3>
+      <table>
+        <tr>
+          <td id="kursi1">1</td>
+          <td id="kursi2">2</td>
+          <td id="kursi3">3</td>
+          <td id="kursi4">4</td>
+          <td id="kursi5">5</td>
+        </tr>
+      </table>
+      <br>
+      <div id="hasil" style="margin-top:10px; font-weight: bold;"></div>
+    </div>
+  </div>
+
+  <script>
+    // Index mulai dari 1 sampai 5 (indeks 0 tidak dipakai)
+    let ruangTunggu = Array(6).fill(undefined);
+
+    function cekKursiKosong(arrayKursiRuangTunggu) {
+      for (let i = 1; i <= 5; i++) {
+        if (arrayKursiRuangTunggu[i] === undefined) {
+          return i;
+        }
+      }
+      return -1;
+    }
+
+    function pilihKursi(arrayKursiRuangTunggu, namaPasien, noKursi) {
+      if (noKursi > 5 || noKursi < 1) {
+        tampilkan("Jumlah kursi yang disediakan hanya 5 (1 sampai 5)");
+        return;
+      }
+
+      if (arrayKursiRuangTunggu.includes(namaPasien)) {
+        tampilkan(`Pasien dengan nama ${namaPasien} sudah terdaftar.`);
+        return;
+      }
+
+      if (arrayKursiRuangTunggu[noKursi] === undefined) {
+        arrayKursiRuangTunggu[noKursi] = namaPasien;
+        tampilkan(`Pasien ${namaPasien} berhasil duduk di kursi ${noKursi}`);
+      } else {
+        tampilkan(`Kursi ${noKursi} sudah terisi`);
+      }
+    }
+
+    function panggilanPasien(arrayKursiRuangTunggu, namaPasien) {
+      if (arrayKursiRuangTunggu.every((val, idx) => idx === 0 || val === undefined)) {
+        tampilkan("Tidak ada pasien yang menunggu panggilan");
+        return;
+      }
+
+      let index = arrayKursiRuangTunggu.indexOf(namaPasien);
+      if (index === -1) {
+        tampilkan(`Pasien dengan nama ${namaPasien} tidak ditemukan`);
+      } else {
+        arrayKursiRuangTunggu[index] = undefined;
+        tampilkan(`Pasien ${namaPasien} telah dipanggil dan keluar dari kursi ${index}`);
+      }
+    }
+
+    function cek() {
+      let index = cekKursiKosong(ruangTunggu);
+      if (index === -1) {
+        tampilkan("Semua kursi sudah terisi silahkan tunggu");
+      } else {
+        tampilkan("Kursi kosong pertama ada di nomor: " + index);
+      }
+    }
+
+    function daftar() {
+      let nama = document.getElementById("namaPasien").value.trim();
+      let no = parseInt(document.getElementById("noKursi").value);
+      if (nama === "" || isNaN(no)) {
+        tampilkan("Mohon isi nama pasien dan nomor kursi dengan benar.");
+        return;
+      }
+      pilihKursi(ruangTunggu, nama, no);
+    }
+
+    function panggil() {
+      let nama = document.getElementById("namaPanggilan").value.trim();
+      if (nama === "") {
+        tampilkan("Nama pasien harus diisi.");
+        return;
+      }
+      panggilanPasien(ruangTunggu, nama);
+    }
+
+    function tampilkan(teks) {
+      document.getElementById("hasil").innerText = teks;
+
+      for (let i = 1; i <= 5; i++) {
+        let td = document.getElementById("kursi" + i);
+        td.innerText = ruangTunggu[i] || i;
+        td.style.backgroundColor = ruangTunggu[i] ? "#FFEB3B" : "#E0F2F1";
+      }
+    }
+  
+
+</script>
+
+  </script>
+
+</body>
+</html>
