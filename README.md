@@ -39,11 +39,11 @@
 ## 🛠️ **Teknologi**
 - **HTML5** → Struktur halaman
 - **CSS3** → Styling dan layout
-- **JavaScript (Vanilla)** → Logika aplikasi
+- **JavaScript** → Logika aplikasi
 
 ---
 
 ## 🚀 **Instalasi & Penggunaan**
 1. **Clone Repository**
    ```bash
-   git clone https://github.com/Yohnzz/To-Do-List.git
+   git clone https://github.com/Yohnzz/Puskesmas.git
