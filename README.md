@@ -30,7 +30,8 @@
 ---
 
 ## 📸 **Preview**
-![Preview App](./assets/preview.png)  
+![Preview App](./assets/G2.png)  
+![Preview App](./assets/G1.png)  
 
 
 ---
